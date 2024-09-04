@@ -1,0 +1,23 @@
+<h2>Список продуктов</h2>
+<div class="container text-center">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% @products.each do |product| %>
+      <div class="col">
+        <div class="card">
+          <img src="<%= product.path_to_image %>" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><%= product.title %></h5>
+            <p class="card-text"><%= product.description %></p>
+          </div>
+          <div class="card-footer">
+            <small class="text-body-secondary">Цена: <%= product.price %></small><br>
+            <small class="text-body-secondary">Размер: <%= product.size %></small><br>
+            <small class="text-body-secondary"><%= product.is_spicy ? 'Специи' : 'Без специй' %></small><br>
+            <small class="text-body-secondary"><%= product.is_veg ? 'Вегетарианская' : '' %></small><br>
+            <small class="text-body-secondary"><%= product.is_best_offer ? 'Лучшее предложене' : '' %></small><br>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

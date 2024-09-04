@@ -2,7 +2,7 @@ class CreateProducts < ActiveRecord::Migration[7.2]
   def change
     create_table :products do |t|
       t.string :title
-      t.text :discription
+      t.text :description
       t.decimal :price
       t.decimal :size
       t.boolean :is_spicy

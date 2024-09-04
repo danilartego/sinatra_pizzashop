@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_02_112516) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_02_115830) do
   create_table "products", force: :cascade do |t|
     t.string "title"
-    t.text "discription"
+    t.text "description"
     t.decimal "price"
     t.decimal "size"
     t.boolean "is_spicy"
