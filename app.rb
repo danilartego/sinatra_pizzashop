@@ -22,6 +22,6 @@ get '/about' do
 	erb :about
 end
 
-get '/list_products' do
-	erb :list_products
+get '/products' do
+	erb :products
 end
