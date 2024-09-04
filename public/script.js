@@ -5,3 +5,7 @@ function something() {
 
   alert(x);
 }
+
+function addToCart() {
+ alert('Товар добавлен в корзину');
+}

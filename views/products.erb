@@ -17,14 +17,10 @@
             <small class="text-body-secondary"><%= product.is_spicy ? 'Специи' : 'Без специй' %></small><br>
             <small class="text-body-secondary"><%= product.is_veg ? 'Вегетарианская' : '' %></small><br>
             <small class="text-body-secondary"><%= product.is_best_offer ? 'Лучшее предложене' : '' %></small><br>
-            <div>
             <br>
-            <button class="btn btn-sm btn-success" onClick="something()">Кнопка</button>
-            </div>
+            <button class="btn btn-sm btn-success" onClick="addToCart()">Add to cart</button>
           </div>
-          
         </div>
-        
       </div>
     <% end %>
   </div>
