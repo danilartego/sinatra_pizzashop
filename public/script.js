@@ -27,9 +27,14 @@ function addToCart(id) {
   window.localStorage.setItem(key, x);
 }
 
+/**
+ * Prints the total number of products in the cart
+ * using the local storage to retrieve the numbers
+ * of products in the cart.
+ */
 function printCart() {
   const hh = window.localStorage
   const sum = Object.values(hh).reduce((accumulator, currentValue) => accumulator + Number(currentValue), 0);
 
-  console.log(sum); // Вывод: 60
+  console.log(sum);
 }
