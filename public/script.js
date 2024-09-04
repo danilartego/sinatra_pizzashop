@@ -56,3 +56,21 @@ function printCart() {
   console.log(cnt);
   return cnt;
 }
+
+function getBasket() {
+
+  let orders = '';
+
+  for (let i = 0; i < window.localStorage.length; i++) {
+
+    let key = window.localStorage.key(i); // получаем ключ
+    let value = window.localStorage.getItem(key); // получаем значение
+
+    if (key.indexOf('product_') == 0) {
+      orders = orders + key + '=' + value + ',';
+    }
+  }
+
+  console.log(orders);
+  return orders;
+}
