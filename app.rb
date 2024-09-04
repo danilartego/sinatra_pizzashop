@@ -25,3 +25,7 @@ end
 get '/products' do
 	erb :products
 end
+
+post '/cart' do
+	erb "hello"
+end
