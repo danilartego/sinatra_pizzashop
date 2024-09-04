@@ -18,13 +18,15 @@ function something() {
 // @param id - id of the product to add to the cart
 function addToCart(id) {
   // The key for the local storage
-  var key = 'product' + id;
+  var key = 'product_' + id;
   // Get the current number of products in the cart
   var x = window.localStorage.getItem(key);
   // Increment the number of products
   x = x * 1 + 1;
   // Save the new number of products in the cart
   window.localStorage.setItem(key, x);
+  // Вывод сообщения об добавлении в корзину
+  alert('Added to cart: ' + printCart());
 }
 
 /**
@@ -33,8 +35,24 @@ function addToCart(id) {
  * of products in the cart.
  */
 function printCart() {
-  const hh = window.localStorage
-  const sum = Object.values(hh).reduce((accumulator, currentValue) => accumulator + Number(currentValue), 0);
+  // Get the number of products in the cart
+  // const hh = window.localStorage
 
-  console.log(sum);
+  // const sum = Object.values(hh).reduce((accumulator, currentValue) => accumulator + Number(currentValue), 0);
+  // console.log(sum);
+
+  let cnt = 0;
+
+  for (let i = 0; i < window.localStorage.length; i++) {
+
+    let key = window.localStorage.key(i); // получаем ключ
+    let value = window.localStorage.getItem(key); // получаем значение
+
+    if (key.indexOf('product_') == 0) {
+      cnt = cnt + value * 1;
+    }
+  }
+
+  console.log(cnt);
+  return cnt;
 }
