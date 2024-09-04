@@ -1,83 +1,110 @@
-## Урок 32
+## Урок 33
 
-Начало создания Магазина PizzaShop
+Продолжение урока по созданию магазина Пицы
 
-#### Разбор вопросов:
+#### Разбор вопросов (2):
 
 > Изучить: 15 Questions to Ask During a Ruby Interview · GitHub
 > https://gist.github.com/krdprog/64a463de21fe77a8946019fde6662d67
 
-- классы содержат данные, имеют методы, которые взаимодействуют с этими данными и используются для того, чтобы создавать объекты на основе этих классов
-- объект - это экземпляр класса. для некоторых - это коренной класс руби Object
-- модуль - механизм, который служит для namespaces (пространства имён) module/end - Namespace::Class.method. Ещё, модули предоставляют механизм для множественного наследования с помощью миксинов. module/end - extend
-- три уровня доступа для модулей и классов: public - по умолчанию, protected, private - методы доступные только внутри самого класса
+- три способа вызвать метод в руби:
+  
+  ```ruby
+  # 1
+  object = Object.new
+  puts object.object_id
+  ```
 
-> [ООП с примерами (часть 1) / Хабр](https://habr.com/post/87119/)
-> [ООП с примерами (часть 2) / Хабр](https://habr.com/post/87205/)
+# 2
 
-> [GitHub - ro31337/first-visit-js: Tiny jQuery plugin to display a message to the user on the first visit to a page](https://github.com/ro31337/first-visit-js)
+puts object.send(:object_id)
 
-#### localStorage
+# 3
 
-```js
-window.localStorage
+puts object.method(:object_id).call
+
+```
+- оператор ||=
+
+> [operators - What does \||= (or-equals) mean in Ruby? - Stack Overflow](https://stackoverflow.com/questions/995593/what-does-or-equals-mean-in-ruby#14697343)
+
+> [ruby - Что делает оператор «\|| =» в рубине?](https://stackoverrun.com/ru/q/2545320)
+
+- Что такое self? self всегда указывает на текущий объект. Может быть вызван без создания объекта.
+
+```ruby
+class WhatIsSelf
+  def test
+    puts "At the instance level, self is #{self}"
+  end
+
+  def self.test
+    puts "At the class level, self is #{self}"
+  end
+end
+
+WhatIsSelf.test
+ #=> At the class level, self is WhatIsSelf
+
+WhatIsSelf.new.test
+ #=> At the instance level, self is #<WhatIsSelf:0x28190>
 ```
 
-> HTML5 Web Storage https://www.w3schools.com/html/html5_webstorage.asp
+> [15 Questions to Ask During a Ruby Interview · GitHub](https://gist.github.com/krdprog/64a463de21fe77a8946019fde6662d67#what-does-self-mean)
 
-> [Почему не стоит использовать LocalStorage / Хабр](https://habr.com/post/349164/)
+- Что такое Proc? Процедура. Три типа:
+1. анонимные методы (функции без имени)
+2. lambda
+3. блок
 
-> [LocalStorage на пальцах](https://tproger.ru/articles/localstorage/)
+```ruby
+# wants a proc, a lambda, AND a block
+def three_ways(proc, lambda, &block)
+  proc.call
+  lambda.call
+  yield # like block.call
+  puts "#{proc.inspect} #{lambda.inspect} #{block.inspect}"
+end
 
-> [window.localStorage - Web APIs \| MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+anonymous = Proc.new { puts "I'm a Proc for sure." }
+nameless  = lambda { puts "But what about me?" }
+
+three_ways(anonymous, nameless) do
+  puts "I'm a block, but could it be???"
+end
+ #=> I'm a Proc for sure.
+ #=> But what about me?
+ #=> I'm a block, but could it be???
+ #=> #<Proc:0x00089d64> #<Proc:0x00089c74> #<Proc:0x00089b34>
+```
+
+#### Продолжение PizzaShop
+
+- нам надо создать корзину, но чтобы при закрытии браузера данные сохранялись.
+
+Помежуточная проверка работает ли кнопка:
+
+```html
+<p><button onclick="alert('hello')">Добавить в корзину</button></p>
+```
+
+##### Number 2:
+
+js:
 
 ```js
-function foo() {
-  var x = window.localStorage.getItem('score');
-
-  window.localStorage.setItem('score', 555);
-
-  alert(x);
+function add_to_cart() {
+  alert('hello all!');
 }
 ```
 
-```js
-function foo() {
-  var x = window.localStorage.getItem('score'); // это как x = hh['score'] в ruby
+html:
 
-  // x * 1 - чтобы преобразовать строку в число
-  x = x * 1 + 1;
-
-  window.localStorage.setItem('score', x); // hh['score'] = x
-
-  alert(x);
-}
+```html
+<p><button onclick="add_to_cart()">Добавить в корзину</button></p>
 ```
 
-> Looping through localStorage in HTML5 and JavaScript - Stack Overflow
-> https://stackoverflow.com/questions/3138564/looping-through-localstorage-in-html5-and-javascript
-
-#### ActiveRecord
-
-> [ActiveRecord::ConnectionAdapters::TableDefinition](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html)
-
-> [ActiveRecord::ConnectionAdapters::SchemaStatements](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html)
-
-- :primary_key
-- :text
-- :integer
-- :float
-- :decimal
-- :datetime
-- :timestamp
-- :time
-- :date
-- :binary
-- :boolean
-
-#### PizzaShop
-
-- цены рекомендуется хранить в базе в минимальных величинах
+> Плохие программисты беспокоятся о коде. Хорошие программисты беспокоятся о структурах данных и их взаимодействии (Л. Торвальдс)
 
 ```ruby
 # + to app.rb
@@ -94,80 +121,135 @@ end
 get '/' do
   erb :index
 end
-```
 
-```bash
-rake db:create_migration NAME=create_products
-```
-
-```ruby
-# + to db/migrate/9279387982_create_products.rb
-
-class CreateProducts < ActiveRecord::Migration[5.2]
-  def change
-    create_table :products do |t|
-      t.string :title
-      t.text :description
-      t.decimal :price
-      t.decimal :size
-      t.boolean :is_spicy
-      t.boolean :is_veg
-      t.boolean :is_best_offer
-      t.string :path_to_image
-
-      t.timestamps
-    end
-  end
+get '/products' do
+  @products = Product.all
+  erb :products
 end
 ```
 
-### Seed database. Наполним вручную базу данных
+```ruby
+# + to views/products.erb
 
-```bash
-rake db:create_migration NAME=add_products
+<h1>Наша продукция:</h1>
+
+<table cellpadding="10" cellspacing="0" border="1">
+<% @products.each do |product| %>
+  <tr>
+    <td>
+      <h2><%= product.title %></h2>
+      <p><strong>Описание:</strong> <%= product.description %></p>
+    </td>
+
+    <td><img src="<%= product.path_to_image %>" alt="<%= product.title %>"></td>
+
+    <td>
+      <p><strong>Цена:</strong> <%= product.price %> руб.</p>
+      <p><strong>Размер:</strong> <%= product.size %> см</p>
+      <p><button onclick="add_to_cart(<%= product.id %>)">Добавить в корзину</button></p>
+    </td>
+  </tr>
+<% end %>
+</table>
 ```
 
+#### Структура данных для нашей корзины заказа в PizzaShop - хеш:
+
+- key - id продукта
+- value - количество
+
+Перед написанием на js напишем на ruby:
+
 ```ruby
-# + to db/migrate/786238472_add_products.rb
+order = {}
 
-class AddProducts < ActiveRecord::Migration[5.2]
-  def change
-    Product.create :title => 'Гавайская',
-      :description => 'Это гавайская пицца',
-      :price => 350,
-      :size => 30,
-      :is_spicy => false,
-      :is_veg => false,
-      :is_best_offer => false,
-      :path_to_image => '/images/01.jpg'
+loop do
+  print 'Введите id продукта: '
+  id_product = gets.strip
 
-    Product.create :title => 'Пепперони',
-      :description => 'Это пицца Пепперони',
-      :price => 450,
-      :size => 30,
-      :is_spicy => false,
-      :is_veg => false,
-      :is_best_offer => true,
-      :path_to_image => '/images/02.jpg'
+  print "Сколько штук вы хотите заказать: "
+  amount_now = gets.strip.to_i
 
-    Product.create :title => 'Вегетарианская',
-      :description => 'Это вегетарианская пицца',
-      :price => 400,
-      :size => 30,
-      :is_spicy => false,
-      :is_veg => true,
-      :is_best_offer => false,
-      :path_to_image => '/images/03.jpg'
-  end
+  amount = order[id_product].to_i
+  amount += amount_now
+
+  order[id_product] = amount
+
+  puts order.inspect
 end
 ```
 
-И, сделаем:
+> GitHub - krdprog/order-counter-ruby: Order counter (Ruby)
+> https://github.com/krdprog/order-counter-ruby/
 
-```ruby
-rake db:migrate
+На сервер мы будем передавать строку.
+
+```txt
+1 = 5, 2 = 12, 3 = 0
 ```
 
-#### Домашнее задание:
+Можно использовать json.
 
-- сделать страницу вывода продуктов
+Теперь напишем это на JS:
+
+```js
+// + to public/js/main.js
+
+function add_to_cart(id)
+{
+  var key = 'product_' + id;
+
+  var x = window.localStorage.getItem(key);
+  x = x * 1 + 1;
+  window.localStorage.setItem(key, x);
+}
+```
+
+Смотрим на наличие ошибок в консоли Firefox веб-инспектора.
+
+И, смотрим в хранилище веб-инспектора. Или в консоли веб-инспектора набрать:
+
+```txt
+localStorage
+```
+
+Очистить:
+
+```txt
+localStorage.clear();
+```
+
+> Когда нужно делать рефакторинг кода. Ответ: всегда.
+
+Сделаем счётчик товаров в корзине:
+
+- ламерский способ - создать переменную counter, но это не будет учитывать наш localStorage
+
+Нам надо пройтись по хешу и посчитать продукты, которые добавили в корзину:
+
+```ruby
+# + to app-order-calc.rb
+
+# calculate total number of items in cart
+total = 0
+
+order.each do |key, value|
+  total += value
+end
+
+puts "Total: #{total}"
+```
+
+> javascript - Listing localstorage - Stack Overflow
+> https://stackoverflow.com/questions/2841029/listing-localstorage#2841042
+
+> javascript - enumerating localStorage properties - Stack Overflow
+> https://stackoverflow.com/questions/27946563/enumerating-localstorage-properties
+
+**Домашнее задание:**
+
+- найти про enumerate localStorage
+- найти как пройтись по каждому элементу хеша localStorage
+- написать JS функцию подсчёта общего количества заказанных продуктов в корзине.
+
+---
