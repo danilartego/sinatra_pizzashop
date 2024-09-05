@@ -16,7 +16,6 @@
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">PizzaShop</a>
-   
           <button class="navbar-toggler" 
                   type="button" 
                   data-bs-toggle="collapse" 
@@ -30,7 +29,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item"> <a class="nav-link active" aria-current="page" href="/products">Product</a> </li>
               <li class="nav-item"> <a class="nav-link active" aria-current="page" href="/about">About</a> </li>
-
+              <li class="nav-item"> <a class="nav-link active" aria-current="page" href="/order">Заказы</a> </li>
               <!-- <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Меню
@@ -46,19 +45,18 @@
                 <a class="nav-link disabled" aria-disabled="true">Disabled</a>
               </li> -->
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li>
-                <form action="/cart" method="POST" class="d-flex">
-                <input class="form-control" name="orders" type="text">
-                <input type="submit" class="btn btn-primary btn-lg" value="Корзина (0 шт.)">
-                </form>
-              </li>
-            </ul>
             <!-- <form class="d-flex" role="search">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form> -->
+          </div class="nav navbar-nav navbar-right">
+          <form action="/cart" method="POST" class="d-flex">
+            <input class="form-control" name="orders" type="hidden" id="orders_input">
+            <input type="submit" class="btn btn-primary btn-lg" id="orders_button" value="">
+          </form>
+          <button class="btn btn-success btn-lg" onClick="clearBasket()">Очистить</button>
           </div>
+          
         </div>
       </nav>
       <div>
@@ -70,3 +68,9 @@
     </div>
   </body>
 </html>
+<script>
+  $(function() {
+    updateBasketInput()
+    updateBasketButton()
+  })
+</script>

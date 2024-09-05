@@ -1,0 +1,21 @@
+<div class="container text-left">
+  <% @users.each do |user| %>
+    <% @orders.each do |order| %>
+      <% if order.user_id == user.id %>
+        <h4>Заказчик: <%= user.name %></h4>
+        <p>Заказ номер: <%= order.id %><br>
+        </p>
+        
+        <% @order_items.each do |item| %>
+        <% if order.id == item.order_id %>
+          <p>
+            Пицца: <%= item.product.title %><br>
+            Количество: <%= item.value %><br>
+          </p>
+
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
