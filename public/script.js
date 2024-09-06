@@ -1,13 +1,4 @@
 
-function something() {
-  var x = window.localStorage.getItem('score2');
-  x = x * 1 + 1;
-  window.localStorage.setItem('score2', x);
-
-  alert(x);
-}
-
-
 function addToCart(id) {
 
   var key = 'product_' + id;
@@ -48,7 +39,7 @@ function updateBasketInput() {
 }
 
 function updateBasketButton() {
-  let orders = 'Cart (' + printCart() + ')';
+  let orders = 'Корзина (' + printCart() + ')';
   $('#orders_button').val(orders);
 }
 

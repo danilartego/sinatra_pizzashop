@@ -1,13 +1,14 @@
-<div class="container text-left">
-  <h4><%=@orders_hash.length <= 0 ? "Ничего не заказано" : "Заказ в корзине:"%></h4>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+<div class="container text-left"><br>
+  <h4><%=@orders_hash.length <= 0 ? "Корзина пуста" : "Заказ в корзине:"%></h4>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
     <% @products.each do |product| %>
       <% @orders_hash.each do |key, value| %>
         <% if product.id == key %>
           <div class="card-group">
             <div class="card">
-              <div class="card-header">
-                <h5 class="card-title"><%= "#{product.title} (#{value})" %></h5>
+              <div class="card-header d-flex w-100 justify-content-between">
+                <h5 class="card-title"><%= product.title %></h5>
+                <h5 class="text-body-secondary"><%= value %></h5>
               </div>
               <img src="<%= product.path_to_image %>" class="card-img-top" alt="...">
               <div class="card-body">
@@ -15,9 +16,9 @@
               </div>
               <div class="card-footer">
                 <small class="text-body-secondary">Цена: <%= product.price %> руб.</small><br>
-                <small class="text-body-secondary">Размер: <%= product.size %> мм.</small><br>
+                <small class="text-body-secondary">Размер: <%= product.size %></small><br>
                 <br>
-                <button class="btn btn-sm btn-success" onClick="addToCart(<%= product.id %>)">Add to cart</button>
+                <button class="btn btn-sm btn-success" onClick="addToCart(<%= product.id %>)">Добавить +1</button>
               </div>
             </div>
           </div>
@@ -26,22 +27,23 @@
     <% end %>
   </div>
   <br>
-  <div class="form-control">
-    <form action="/order" method="POST">
-      <div class="mb-3">
-        <label class="form-label">Имя</label>
-        <input name="user[name]" type="text" class="form-control" >
+  <% if @orders_hash.length > 0 %>
+    <div class="form-control" style="width: 450px;">
+      <form action="/order" method="POST">
+      <div class="mb-3"> <h6>Введите данные для оформления заказа:</h6>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Телефон</label>
-        <input name="user[phone]" type="text" class="form-control" >
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Адрес</label>
-        <input name="user[adress]" type="text" class="form-control" >
-      </div>
-      <input class="form-control" name="orders" type="hidden" id="orders_send">
-      <button type="submit" class="btn btn-primary">Отправить заказ</button>
-    </form>
-  </div>
+        <div class="mb-3">
+          <input name="user[name]" type="text" class="form-control" placeholder="Имя">
+        </div>
+        <div class="mb-3">
+          <input name="user[phone]" type="text" class="form-control" placeholder="Телефон">
+        </div>
+        <div class="mb-3">
+          <input name="user[adress]" type="text" class="form-control" placeholder="Адрес">
+        </div>
+        <input class="form-control" name="orders" type="hidden" id="orders_send">
+        <button type="submit" class="btn btn-primary">Отправить заказ</button>
+      </form>
+    </div>
+  <% end %>
 </div>

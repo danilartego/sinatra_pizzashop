@@ -32,7 +32,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_05_055822) do
     t.string "title"
     t.text "description"
     t.decimal "price"
-    t.decimal "size"
+    t.string "size"
     t.boolean "is_spicy"
     t.boolean "is_veg"
     t.boolean "is_best_offer"

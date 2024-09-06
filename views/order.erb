@@ -1,20 +1,40 @@
 <div class="container text-left">
+  <h4><%=@orders.length <= 0 ? "Ничего не заказано" : ""%></h4>
   <% @users.each do |user| %>
     <% @orders.each do |order| %>
-      <% if order.user_id == user.id %>
-        <h4>Заказчик: <%= user.name %></h4>
-        <p>Заказ номер: <%= order.id %><br>
+      <% if order.user_id == user.id %><br>
+        <br>
+        <h3>Заказчик: <%= user.name %></h3>
+        <hr>
+        <p>
+          Номер телефона: <%= user.phone %><br>
+          Адрес доставки: <%= user.adress %><br>
+          Номер заказа: <%= order.id %>
         </p>
-        
-        <% @order_items.each do |item| %>
-        <% if order.id == item.order_id %>
-          <p>
-            Пицца: <%= item.product.title %><br>
-            Количество: <%= item.value %><br>
-          </p>
-
-          <% end %>
-        <% end %>
+        <div class="card-group">
+          <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
+            <% @order_items.each do |item| %>
+              <% if order.id == item.order_id %>
+                <div class="card-group">
+                  <div class="card text-center">
+                    <div class="card-header">
+                      <h5 class="card-title"><%= item.product.title %></h5>
+                    </div>
+                    <img src="<%= item.product.path_to_image %>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h4 class="card-text"> <%= item.value.round %> шт.</h4>
+                      
+                    </div>
+                    <div class="card-footer">
+                      <small class="text-body-secondary">Цена: <%= item.product.price.round %> руб. </small><br>
+                      <small class="text-body-secondary">Размер: <%= item.product.size %> </small><br>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       <% end %>
     <% end %>
   <% end %>

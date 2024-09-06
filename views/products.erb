@@ -1,24 +1,23 @@
-<div class="container text-left">
-  <h4>Список продуктов</h4>
+<div class="container text-left"><br>
+  <h3>Список продуктов</h3>
   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
     <% @products.each do |product| %>
       <div class="card-group">
         <div class="card">
-          <div class="card-header">
-            <h5 class="card-title"><%= product.title %></h5>
+          <div class="card-header d-flex w-100 justify-content-between">
+            <h5 class="card-title"><%= product.title %> </h5>
+            <small class="text-body-secondary"><%= product.is_best_offer ? 'BEST' : '' %></small>
           </div>
           <img src="<%= product.path_to_image %>" class="card-img-top" alt="...">
           <div class="card-body">
             <p class="card-text"><%= product.description %></p>
           </div>
           <div class="card-footer">
-            <small class="text-body-secondary">Цена: <%= product.price %> руб.</small><br>
-            <small class="text-body-secondary">Размер: <%= product.size %> мм.</small><br>
+            <small class="text-body-secondary">Размер: <%= product.size %> </small><br>
             <small class="text-body-secondary"><%= product.is_spicy ? 'Специи' : 'Без специй' %></small><br>
             <small class="text-body-secondary"><%= product.is_veg ? 'Вегетарианская' : '' %></small><br>
-            <small class="text-body-secondary"><%= product.is_best_offer ? 'Лучшее предложене' : '' %></small><br>
-            <br>
-            <button class="btn btn-sm btn-success" onClick="addToCart(<%= product.id %>)">Add to cart</button>
+          
+            <button class="btn btn-sm btn-success" onClick="addToCart(<%= product.id %>)">Цена: <%= product.price.round %> руб. | ДОБАВИТЬ </button>
           </div>
         </div>
       </div>
