@@ -5,6 +5,8 @@
       <% if order.user_id == user.id %><br>
         <br>
         <h3>Заказчик: <%= user.name %></h3>
+        <h5>Количество пицц: <%= @user_sum_values[user.id].round %> шт.</h5>
+        <h5>Сумма заказа: <%= @user_sum_price[user.id].round %> руб.</h5>
         <hr>
         <p>
           Номер телефона: <%= user.phone %><br>
@@ -23,10 +25,10 @@
                     <img src="<%= item.product.path_to_image %>" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h4 class="card-text"> <%= item.value.round %> шт.</h4>
-                      
                     </div>
                     <div class="card-footer">
                       <small class="text-body-secondary">Цена: <%= item.product.price.round %> руб. </small><br>
+                      <small class="text-body-secondary">Сумма: <%= item.product.price.round * item.value.round %> руб. </small><br>
                       <small class="text-body-secondary">Размер: <%= item.product.size %> </small><br>
                     </div>
                   </div>

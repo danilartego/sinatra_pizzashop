@@ -1,304 +1,192 @@
-## Урок 34
+## Урок 35
 
-Продолжение урока по созданию магазина Пицы
+продолжение урока по созданию PizzaShop
 
-#### x ||= y
+#### Разбор вопросов на интервью
 
-Это сокращённо:
+> [15 Questions to Ask During a Ruby Interview · GitHub](https://gist.github.com/krdprog/64a463de21fe77a8946019fde6662d67#what-is-unit-testing-in-classical-terms--what-is-the-primary-technique-when-writing-a-test)
 
-```ruby
-x = x || y
-```
-
-Что означает:
+- Что такое юнит-тесты. Юнит-тесты предназначены для тестирования отдельных модулей программы (к частям, которые не делимы).
 
 ```ruby
-x || y
+require "test/unit"
+
+class Brokened
+  def uh_oh
+    "I needs fixing"
+  end
+end
+
+class BrokenedTest < Test::Unit::TestCase
+  def test_uh_oh
+    actual = Brokened.new
+    assert_equal("I'm all better!", actual.uh_oh)
+  end
+end
+ #=> Started
+ #=> F
+ #=> Finished in 0.663831 seconds.
+ #=>
+ #=>   1) Failure:
+ #=> test_uh_oh:11
+ #=> <"I'm all better!"> expected but was
+ #=> <"I needs fixing">.
+ #=>
+ #=> 1 tests, 1 assertions, 1 failures, 0 errors
 ```
 
-|| - логическое ИЛИ
+> Вызываем метод и проверяем, что результат совпадает с эталоном
 
-```ruby
-if x == 1 || x == 2
-```
+test coverage - покрытие тестами
 
-Срабатывает первое условие, если не срабатывает, берёт второе условие:
+Интеграционное тестирование - тестирование сайта в браузере
 
-```ruby
-nil || 4 #=> 4
-false || 2 #=> 2
-123 || 2 #=> 123
+Как много надо покрывать кода тестами?
 
-x = x || 4
-```
+Юнит тестирование нужно, чтобы при возрастании сложности приложения функциональность большого приложения сохранялась.
 
-```ruby
-x = false
-x = x || 2
-puts x
-#=> 2
+- Статическая и динамическая типизация
 
-x = true
-x = x || 2
-puts x
-#=> true
-
-x = 5
-x = x || 2 # это мы можем заменить на x ||= 2
-puts x
-#=> 5
-
-x = 5
-x ||= 2
-puts x
-#=> 5
-```
-
-#### x ||= y используется для установки значения по умолчанию
-
-#### Продолжаем PizzaShop:
-
-Напишем подсчёт количества товаров в корзине на js:
-
-```js
-// + to public/js/main.js
-
-function cart_get_number_of_items()
-{
-  var cnt = 0;
-
-  for (var i = 0; i < window.localStorage.length; i++)
-  {
-    var key = window.localStorage.key(i); // получаем ключ
-    var value = window.localStorage.getItem(key); // получаем значение
-
-    if(key.indexOf('product_') == 0)
-    {
-      cnt = cnt + value * 1;
-    }
-  }
-
-  return cnt;
+```java
+// Java
+public boolean isEmpty(String s) {
+  return s.length() == 0;
 }
 ```
 
-Проверим в консоли firefox:
-
-```txt
-cart_get_number_of_items()
-```
-
 ```ruby
-# + to views/layout.erb
-<form action="/cart" method="POST">
-  <input type="submit" value="Корзина (0 шт.)">
-</form>
-```
-
-#### ИТОГО:
-
-```ruby
-# + to views/layout.erb
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-<p><a href="/">Главная страница</a> | <a href="/products">Наша продукция</a>
-
-  <form action="/cart" method="POST">
-    <input type="hidden" name="orders" id="orders_input">
-    <input type="submit" id="orders_button">
-  </form>
-</p>
-
-<%= yield %>
-
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="/js/main.js"></script>
-
-  <script>
-    $(function() {
-      update_orders_input();
-      update_orders_button();
-    });
-  </script>
-
-</body>
-</html>
-```
-
-```js
-// + to public/js/main.js
-
-function add_to_cart(id)
-{
-  var key = 'product_' + id;
-
-  var x = window.localStorage.getItem(key);
-  x = x * 1 + 1;
-  window.localStorage.setItem(key, x);
-
-  update_orders_input();
-  update_orders_button();
-}
-
-
-function cart_get_number_of_items()
-{
-  var cnt = 0;
-
-  for (var i = 0; i < window.localStorage.length; i++)
-  {
-    var key = window.localStorage.key(i); // получаем ключ
-    var value = window.localStorage.getItem(key); // получаем значение
-
-    if(key.indexOf('product_') == 0)
-    {
-      cnt = cnt + value * 1;
-    }
-  }
-
-  return cnt;
-}
-
-
-function update_orders_input()
-{
-  orders = cart_get_orders();
-  $('#orders_input').val(orders);
-}
-
-
-function cart_get_orders()
-{
-  var orders = '';
-
-  for (var i = 0; i < window.localStorage.length; i++)
-  {
-    var key = window.localStorage.key(i); // получаем ключ
-    var value = window.localStorage.getItem(key); // получаем значение
-
-    if(key.indexOf('product_') == 0)
-    {
-      orders = orders + key + '=' + value + ',';
-    }
-  }
-
-  return orders;
-}
-
-
-function update_orders_button()
-{
-  var text = 'Корзина (' + cart_get_number_of_items() + ' шт.)';
-  $('#orders_button').val(text);
-}
-```
-
-#### Домашнее задание:
-
-- на странице /cart вывести в виде таблицы список продуктов в корзине и их количество
-- на странице /cart сделать так, чтобы форма сабмитилась по адресу /order и чтобы в базу данных заносился заказ: имя, телефон, адрес доставки, список купленных товаров (в виде текстового поля).
-
-### Ruby on Rails
-
-Я устанавливаю ruby через RVM
-
-Посмотрим доступные версии Rails:
-
-```bash
-gem search '^rails$' --all
-```
-
-Чтобы установить конкретную версию, введите (вместо rails_version - номер версии):
-
-```bash
-gem install rails -v rails_version
-```
-
-С помощью gemset-ов можно использовать вместе разные версии Rails и Ruby. Это делается с помощью команды gem.
-
-```ruby
-rvm gemset create gemset_name # create a gemset
-rvm ruby_version@gemset_name  # specify Ruby version and our new gemset
-```
-
-Gemset-ы позволяют создавать полнофункциональные окружения для gem-ов, а также настраивать неограниченное количество окружений для каждой версии Ruby.
-
-> [GitHub - DefactoSoftware/Hours: Time registration that doesn't suck](https://github.com/DefactoSoftware/Hours)
-
-#### Rails-приложение может запускаться в 3 типах окружения:
-
-- development
-- test
-- production
-
-#### Создадим новое рейлс-приложение:
-
-```bash
-rails new blog
-```
-
-Последовательность запуска rails (для справки):
-
-```txt
-boot.rb -> rails -> environment.rb -> development.rb (test.rb or production.rb)
-```
-
-Запуск приложения:
-
-```bash
-rails s
-```
-
-Если не запустится, установи nodejs:
-
-```bash
-sudo apt-get install nodejs
-```
-
-Если всё ок, приложение запустится и можно открывать в браузере: http://localhost:3000/
-
-Обновлять bundle можно командой:
-
-```bash
-bundle update
-```
-
-### MVC
-
-Model, View, Controller
-
-Controller - отвечает за работу с какой-либо сущностью
-
-#### Создадим контроллер:
-
-```bash
-rails generate controller home index
-```
-
-Найдём файл /app/controllers/home_controller.rb
-
-Найдём файл /app/views/home/index.html.erb
-
-Откроем в браузере: http://localhost:3000/home/index
-
-> Обычно /home/index создаётся для главной страницы сайта
-> Надо открыть /config/routes.rb и прописать:
-
-```ruby
-Rails.application.routes.draw do
-  get '/' => 'home#index'
+# ruby
+def empty?(s)
+  return s.size == 0
 end
 ```
 
-> Изучить: Rails Routing from the Outside In — Ruby on Rails Guides
-> http://guides.rubyonrails.org/routing.html
+В руби меньше кода и он более гибкий.
+
+> [oDesk and Elance Tests 2015](https://web.archive.org/web/20150220030931/http://odesk-tests.com:80/)
+
+> [Ruby on Rails Test 2015 - oDesk](https://web.archive.org/web/20150206003956/http://odesk-tests.com:80/tests/307/questions)
+
+#### Продолжаем PizzaShop
+
+Нам надо разбить строку результата заказа в Ruby
+
+```txt
+"product_1=9,product_3=2,"
+```
+
+Создадим отдельную руби-программу:
+
+```ruby
+# pizza-shop-other.rb
+
+orders = "product_1=9,product_3=2,"
+
+s1 = orders.split(/,/)
+
+s1.each do |x|
+  s2 = x.split(/=/)
+  s3 = s2[0].split(/_/)
+
+  key = s3[1]
+  value = s2[1]
+
+  puts "Priduct Id: #{key}, number of items: #{value}"
+end
+```
+
+Это не эффективный способ, лучше использовать json (позволяет поддерживать формат данных любой сложности).
+
+Перепишем в метод:
+
+```ruby
+# + to app.rb
+
+post '/cart' do
+  orders_input = params[:orders]
+
+  @items = parse_orders_input orders_input
+
+  @items.each do |item|
+    # id, cnt
+    item[0] = Product.find(item[0])
+  end
+
+  erb :cart
+end
+
+# Parse orders line:
+def parse_orders_input orders_input
+
+  s1 = orders_input.split(/,/)
+
+  arr = []
+
+  s1.each do |x|
+    s2 = x.split(/=/)
+    s3 = s2[0].split(/_/)
+
+    id = s3[1]
+    cnt = s2[1]
+
+    arr2 = [id, cnt]
+    arr.push arr2
+  end
+
+  return arr
+end
+```
+
+```ruby
+# + to /views/cart.erb
+
+<h2>Заказанные товары:</h2>
+
+<table border="1" cellspacing="0" cellpadding="10">
+  <tr>
+    <th>Товар</th>
+    <th>Цена</th>
+    <th>Количество</th>
+  </tr>
+
+  <% total_qty = 0 %>
+  <% total_price = 0 %>
+
+  <% @items.each do |item| %>
+  <tr>
+    <td><%= item[0].title %></td>
+    <td><%= item[0].price %> руб.</td>
+    <td><%= item[1] %></td>
+  </tr>
+
+  <% total_qty += item[1].to_i %>
+  <% total_price += item[0].price * total_qty %>
+  <% end %>
+
+  <tr style="background: yellow;">
+    <td><strong>Сумма:</strong></td>
+    <td><%= total_price %> руб.</td>
+    <td><%= total_qty %></td>
+  </tr>
+
+</table>
+```
+
+#### Отношение между сущностями:
+
+- один ко многим
+- многие к одному
+- многие ко многим
+- один к одному
+
+Доделаем PizzaShop не лучшим, но простым путём. Создадим форму и отправим заказ на сервер (сохраним в базе данных).
+
+> GitHub - krdprog/PizzaShop-rubyschool: Pizza Shop (rubyschool project). Ruby, Sinatra, ActiveRecord, JS, localStorage
+> https://github.com/krdprog/PizzaShop-rubyschool
+
+#### Домашнее задание:
+
+- сделать модель Order с полями из формы cart.erb, не забыть про миграцию
+- добавить post-обработчик /place_order в котором получать данные из страницы и сохранять в базу данных
+- выводить на экран сообщение "Заказ принят"
+- выводить на экран страницу со всеми принятыми заказами
