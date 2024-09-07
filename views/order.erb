@@ -3,16 +3,19 @@
   <% @users.each do |user| %>
     <% @orders.each do |order| %>
       <% if order.user_id == user.id %><br>
-        <br>
-        <h3>Заказчик: <%= user.name %></h3>
-        <h5>Количество пицц: <%= @user_sum_values[user.id].round %> шт.</h5>
-        <h5>Сумма заказа: <%= @user_sum_price[user.id].round %> руб.</h5>
+        <div class="d-flex w-100 justify-content-between">
+          <h5>Заказчик: <%= user.name %></h5>
+          <h5>Заказ: <%= order.id %> </h5>
+        </div>
+        <div class="d-flex w-100 justify-content-between">
+          <h6>
+            Телефон: <%= user.phone %><br>
+            Адрес: <%= user.adress %></h6>
+          <h6>Количество: <%= @user_sum_values[user.id].round %> шт.<br>
+            Сумма: <%= @user_sum_price[user.id].round %> руб.
+          </h6>
+        </div>
         <hr>
-        <p>
-          Номер телефона: <%= user.phone %><br>
-          Адрес доставки: <%= user.adress %><br>
-          Номер заказа: <%= order.id %>
-        </p>
         <div class="card-group">
           <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
             <% @order_items.each do |item| %>
@@ -37,6 +40,7 @@
             <% end %>
           </div>
         </div>
+        <br>
       <% end %>
     <% end %>
   <% end %>

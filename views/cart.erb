@@ -1,5 +1,6 @@
 <div class="container text-left"><br>
-  <h4><%=@orders_hash.length <= 0 ? "Корзина пуста" : "Заказ в корзине:"%></h4>
+  <h4><%=@orders_hash.length <= 0 ? "Корзина пуста" : "Заказ в корзине:"%></h4><hr>
+  <% @sum = 0 %>
   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
     <% @products.each do |product| %>
       <% @orders_hash.each do |key, value| %>
@@ -15,8 +16,11 @@
                 <p class="card-text"><%= product.description %></p>
               </div>
               <div class="card-footer">
-                <small class="text-body-secondary">Цена: <%= product.price %> руб.</small><br>
+                
                 <small class="text-body-secondary">Размер: <%= product.size %></small><br>
+                <small class="text-body-secondary">Цена: <%= product.price %> руб.</small><br>
+                <small class="text-body-secondary">Сумма: <%= product.price * value %></small>
+                <% @sum += product.price * value %>
                 <br>
                 <button class="btn btn-sm btn-success" onClick="addToCart(<%= product.id %>)">Добавить +1</button>
               </div>
@@ -25,7 +29,8 @@
         <% end %>
       <% end %>
     <% end %>
-  </div>
+  </div><br>
+  <h4>Сумма заказа: <%= @sum %> руб.</h4><hr>
   <br>
   <% if @orders_hash.length > 0 %>
     <div class="form-control" style="width: 450px;">

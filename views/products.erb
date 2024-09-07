@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-header d-flex w-100 justify-content-between">
             <h5 class="card-title"><%= product.title %> </h5>
-            <small class="text-body-secondary"><%= product.is_best_offer ? 'BEST' : '' %></small>
+            <h5 class="text-body-secondary"><%= product.is_best_offer ? 'BEST' : '' %></h5>
           </div>
           <img src="<%= product.path_to_image %>" class="card-img-top" alt="...">
           <div class="card-body">
