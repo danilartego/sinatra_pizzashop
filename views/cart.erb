@@ -1,5 +1,5 @@
 <div class="container text-left"><br>
-  <h4><%=@orders_hash.length <= 0 ? "Корзина пуста" : "Заказ в корзине:"%></h4><hr>
+  <h4 class="mb-3"><%=@orders_hash.length <= 0 ? "Корзина пуста" : "Заказ в корзине:"%></h4><hr>
   <% @sum = 0 %>
   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
     <% @products.each do |product| %>
