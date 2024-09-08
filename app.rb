@@ -8,6 +8,7 @@ set :database, { adapter: "sqlite3", database: "pizzashop.db" }
 enable :sessions
 
 class User < ActiveRecord::Base
+  # Валидация поля из формы
   validates :name, presence: true
   validates :phone, presence: true
   validates :adress, presence: true
@@ -56,6 +57,7 @@ get "/cart" do
   erb :cart
 end
 
+# Обработчик формы добавления в корзину
 post "/cart" do
   # Получение данных о заказе
   orders_string = params[:orders]
@@ -66,7 +68,10 @@ post "/cart" do
   erb :cart
 end
 
+# Вывод формы заказов
 get "/order" do
+
+
   @user_sum_values = {}
   @user_sum_price = {}
 
@@ -104,7 +109,6 @@ post "/order" do
   # Проверка на пустоту и сохранение
   if @user.save
     
-
     session[:user] = nil
     session[:orders_hash] = nil
   else
@@ -150,23 +154,4 @@ def parce_orders(order)
   # Преобразование хеша в хеш с числовыми ключами
   order_hash = hash.transform_keys { |key| key.gsub(/\D/, "").to_i }
   order_hash
-end
-
-def order_user_save_base(order_hash, user)
-  # Создание заказа
-  order = Order.new
-  # Добавление продуктов в заказ
-  order_hash.each do |product_id, value|
-    product = Product.find(product_id)
-    # Добавление id заказчика в заказ
-    order.user_id = user.id
-    order.save
-
-    # Создание списка с количеством заказанных продуктов
-    order_item = OrderItem.new
-    order_item.order_id = order.id
-    order_item.product_id = product.id
-    order_item.value = value
-    order_item.save
-  end
 end
