@@ -12,24 +12,39 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :phone, presence: true
   validates :adress, presence: true
+
+  # Отношение Пользователя к многим заказам
   has_many :orders
 end
 
 class Product < ActiveRecord::Base
+
+  # Отношение Продукта к многим заказам
   has_many :orders
 end
 
 class Order < ActiveRecord::Base
+
+  # Отношение Заказа к одному Пользователю
   belongs_to :user
+
+  # Отношение Заказа к многим Заказ-Количество
   has_many :order_items
+
+  # Отношение Заказа к многим Продуктам через Заказ-Количество
   has_many :product, through: :order_items
 end
 
 class OrderItem < ActiveRecord::Base
+
+  # Отношение Закаказ-Количество к одному Заказу
   belongs_to :order
+
+  # Отношение Заказ-Количество к одному Продукту
   belongs_to :product
 end
 
+# Назначение переменных перед каждым запросом
 before do
   @products = Product.all
   @users = User.all
@@ -41,14 +56,12 @@ get "/" do
   erb :index
 end
 
-get "/about" do
-  erb :about
-end
-
+# Вывод списка продуктов
 get "/products" do
   erb :products
 end
 
+# Вывод корзины
 get "/cart" do
 
   @user = session[:user]
@@ -72,10 +85,11 @@ end
 # Вывод формы заказов
 get "/order" do
 
-
+  # Создание пустого хеша
   @user_sum_values = {}
   @user_sum_price = {}
 
+  # Получение данных о пользователе с обратной сортировкой
   @users = User.order(id: :desc)
 
   # Подсчет общей суммы и общего колличества
@@ -97,11 +111,11 @@ get "/order" do
   erb :order
 end
 
+# Запись заказа в базу данных с учетом Заказчика и заказанных продуктов
 post "/order" do
   # Получение данных о пользователе
   @user = User.new params[:user]
   
-
   # Получение данных о заказе
   orders_string = params[:orders]
   # Преобразование строки в хеш
@@ -118,8 +132,6 @@ post "/order" do
     session[:error] = @user.errors.full_messages.first
     redirect to :cart
   end
-
-  # @user.save
 
   # Создание заказа
   @order = Order.new
