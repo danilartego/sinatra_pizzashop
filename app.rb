@@ -5,8 +5,12 @@ require "sinatra/reloader"
 require "sinatra/activerecord"
 
 set :database, { adapter: "sqlite3", database: "pizzashop.db" }
+enable :sessions
 
 class User < ActiveRecord::Base
+  validates :name, presence: true
+  validates :phone, presence: true
+  validates :adress, presence: true
   has_many :orders
 end
 
@@ -44,6 +48,14 @@ get "/products" do
   erb :products
 end
 
+get "/cart" do
+  @user = session[:user]
+  @orders_hash = session[:orders_hash]
+  @error = session[:error]
+
+  erb :cart
+end
+
 post "/cart" do
   # Получение данных о заказе
   orders_string = params[:orders]
@@ -57,7 +69,9 @@ end
 get "/order" do
   @user_sum_values = {}
   @user_sum_price = {}
-  
+
+  @users = User.order(id: :desc)
+
   # Подсчет общей суммы и общего колличества
   @users.each do |user|
     @user_sum_values[user.id] = 0
@@ -68,7 +82,6 @@ get "/order" do
           if order.id == item.order_id
             @user_sum_values[user.id] += item.value
             @user_sum_price[user.id] += item.product.price * item.value
-
           end
         end
       end
@@ -81,13 +94,27 @@ end
 post "/order" do
   # Получение данных о пользователе
   @user = User.new params[:user]
-  @user.save
+  
 
   # Получение данных о заказе
   orders_string = params[:orders]
-
   # Преобразование строки в хеш
   @orders_hash = parce_orders(orders_string)
+
+  # Проверка на пустоту и сохранение
+  if @user.save
+    
+
+    session[:user] = nil
+    session[:orders_hash] = nil
+  else
+    session[:user] = @user
+    session[:orders_hash] = @orders_hash
+    session[:error] = @user.errors.full_messages.first
+    redirect to :cart
+  end
+
+  # @user.save
 
   # Создание заказа
   @order = Order.new
