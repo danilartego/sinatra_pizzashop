@@ -4,7 +4,6 @@ require "sinatra"
 require "sinatra/reloader"
 require "sinatra/activerecord"
 
-
 set :database, { adapter: "sqlite3", database: "pizzashop.db" }
 enable :sessions
 
@@ -51,6 +50,8 @@ before do
   @users = User.all
   @orders = Order.all
   @order_items = OrderItem.all
+  # Коррекция времени + 3 часа
+  @corr_time = 3.hours
 end
 
 get "/" do
@@ -64,7 +65,6 @@ end
 
 # Вывод корзины
 get "/cart" do
-
   @user = session[:user]
   @orders_hash = session[:orders_hash]
   @error = session[:error]
@@ -116,7 +116,7 @@ end
 post "/order" do
   # Получение данных о пользователе
   @user = User.new params[:user]
-  
+
   # Получение данных о заказе
   orders_string = params[:orders]
   # Преобразование строки в хеш
@@ -124,7 +124,6 @@ post "/order" do
 
   # Проверка на пустоту и сохранение
   if @user.save
-    
     session[:user] = nil
     session[:orders_hash] = nil
   else

@@ -28,42 +28,23 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item"> <a class="nav-link active" aria-current="page" href="/order">Заказы</a> </li>
-              <!-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Меню
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-              </li> -->
-            </ul>
-            <!-- <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form> -->
-          </div class="nav navbar-nav navbar-right">
-          <form action="/cart" method="POST" class="d-flex">
-            <input class="form-control" name="orders" type="hidden" id="orders_input">
-            <input type="submit" class="btn btn-primary btn-lg" id="orders_button" value="">
-          </form>
-          <button class="btn btn-success btn-lg" onClick="clearBasket()">Очистить</button>
+            </div class="nav navbar-nav navbar-right">
+            <form action="/cart" method="POST" class="d-flex">
+              <input class="form-control" name="orders" type="hidden" id="orders_input">
+              <input type="submit" class="btn btn-primary btn-lg" id="orders_button" value="">
+            </form>
+            <button class="btn btn-success btn-lg" onClick="clearBasket()">Очистить</button>
+          </div>
         </div>
+      </nav>
+      <div class="container text-left">
+        <%if @error && @error.length > 0 then %>
+          <div class="alert alert-danger"><%=@error%></div>
+        <% end %>
+        <%= yield %>
       </div>
-    </nav>
-    <div class="container text-left">
-      <%if @error && @error.length > 0 then %>
-        <div class="alert alert-danger"><%=@error%></div>
-      <% end %>
-      <%= yield %>
     </div>
-  </div>
-</body>
+  </body>
 </html>
 <script>
   $(function() {
