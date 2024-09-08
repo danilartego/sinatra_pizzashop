@@ -50,6 +50,7 @@ get "/products" do
 end
 
 get "/cart" do
+
   @user = session[:user]
   @orders_hash = session[:orders_hash]
   @error = session[:error]

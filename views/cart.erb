@@ -38,13 +38,13 @@
       <div class="mb-3"> <h6>Введите данные для оформления заказа:</h6>
       </div>
         <div class="mb-3">
-          <input name="user[name]" type="text" class="form-control" placeholder="Имя" value="<%= @user.name %>">
+          <input name="user[name]" type="text" class="form-control" placeholder="Имя" value="<%= @user&.name %>">
         </div>
         <div class="mb-3">
-          <input name="user[phone]" type="text" class="form-control" placeholder="Телефон" value="<%= @user.phone %>">
+          <input name="user[phone]" type="text" class="form-control" placeholder="Телефон" value="<%= @user&.phone %>">
         </div>
         <div class="mb-3">
-          <input name="user[adress]" type="text" class="form-control" placeholder="Адрес" value="<%= @user.adress %>">
+          <input name="user[adress]" type="text" class="form-control" placeholder="Адрес" value="<%= @user&.adress %>">
         </div>
         <input class="form-control" name="orders" type="hidden" id="orders_send">
         <button type="submit" class="btn btn-primary">Отправить заказ</button>
